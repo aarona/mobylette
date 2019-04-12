@@ -15,9 +15,9 @@ module Mobylette
 
               it "should change details[:formats] to the fallback array" do
                 details = { formats: [fallback_chain.keys.first] }
-                details.stub(:dup).and_return(details)
+                allow(details).to receive(:dup).and_return(details)
                 subject.send(:find_templates, "", "", "", details)
-                details[:formats].should == fallback_chain.values.first
+                expect(details[:formats]).to eq(fallback_chain.values.first)
               end
 
             end
@@ -31,10 +31,10 @@ module Mobylette
           fallback_chains.each_pair do |format, fallback_array|
             context "#{format} format" do
               it "should change details[:formats] to the fallback array" do
-                details = { formats: [format] } 
-                details.stub(:dup).and_return(details)
+                details = { formats: [format] }
+                allow(details).to receive(:dup).and_return(details)
                 subject.send(:find_templates, "", "", "", details)
-                details[:formats].should == fallback_array
+                expect(details[:formats]).to eq(fallback_array)
               end
             end
           end
@@ -46,10 +46,10 @@ module Mobylette
           details = {:locale=>[:en], :formats=>[:html], :handlers=>[:erb, :builder, :coffee]}
           paths   = ['/app1/home', '/app2/home']
           path    = ActionView::Resolver::Path.build('index', 'tests', nil)
-          
+
           resolver = Mobylette::Resolvers::ChainedFallbackResolver.new({}, paths)
           query = resolver.send :build_query, path, details
-          query.should == "{/app1/home,/app2/home}/tests/index{.{en},}{.{html},}{.{erb,builder,coffee},}"
+          expect(query).to eq("{/app1/home,/app2/home}/tests/index{.{en},}{.{html},}{.{erb,builder,coffee},}")
         end
       end
 

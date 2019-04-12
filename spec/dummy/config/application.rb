@@ -1,10 +1,7 @@
-require File.expand_path('../boot', __FILE__)
+require_relative 'boot'
 
-require "rails"
-require 'action_controller/railtie'
-require 'action_mailer/railtie'
-require 'active_resource/railtie'
-require 'sprockets/railtie'
+require 'rails/all'
+require "action_view/template/resolver"
 
 Bundler.require
 require "mobylette"
@@ -41,6 +38,7 @@ module Dummy
 
     # Enable the asset pipeline
     config.assets.enabled = true
+
+    Rails.application.config.active_record.sqlite3.represent_boolean_as_integer = true
   end
 end
-
